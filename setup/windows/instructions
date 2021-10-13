@@ -1,0 +1,2 @@
+docker-compose --rm server create_db 
+docker-compose up -d
