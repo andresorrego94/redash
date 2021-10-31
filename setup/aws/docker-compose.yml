@@ -2,25 +2,21 @@ version: "2.2"
 x-redash-service: &redash-service
   image: andresorrego94/tablyx:v1
   depends_on:
-    - postgres
     - redis
   restart: always
 x-redash-environment: &redash-environment
   REDASH_LOG_LEVEL: "INFO"
   REDASH_REDIS_URL: "redis://redis:6379/0"
-  REDASH_DATABASE_URL: "postgresql://postgres@postgres/postgres"
+  REDASH_DATABASE_URL: "postgresql://postgres:tablyx94@tablyxdb-qa.cg7gwev1cdib.us-east-1.rds.amazonaws.com:5432/postgres"
   REDASH_RATELIMIT_ENABLED: "false"
   REDASH_MAIL_DEFAULT_SENDER: "redash@example.com"
   REDASH_MAIL_SERVER: "email"
   REDASH_ENFORCE_CSRF: "true"
-  WORKERS_COUNT: 4
-  REDASH_WEB_WORKERS: 4
 services:
   server:
     <<: *redash-service
-    command: server
+    command: dev_server
     depends_on:
-      - postgres
       - redis
     ports:
       - "5000:5000"
@@ -30,14 +26,14 @@ services:
       PYTHONUNBUFFERED: 0
   scheduler:
     <<: *redash-service
-    command: scheduler
+    command: dev_scheduler
     depends_on:
       - server
     environment:
       <<: *redash-environment
   worker:
     <<: *redash-service
-    command: worker
+    command: dev_worker
     depends_on:
       - server
     environment:
@@ -45,18 +41,7 @@ services:
       PYTHONUNBUFFERED: 0
   redis:
     image: redis:3-alpine
-    restart: unless-stopped
-  postgres:
-    image: postgres:9.5-alpine
-    # The following turns the DB into less durable, but gains significant performance improvements for the tests run (x3
-    # improvement on my personal machine). We should consider moving this into a dedicated Docker Compose configuration for
-    # tests.
-    ports:
-      - "15432:5432"
-    command: "postgres -c fsync=off -c full_page_writes=off -c synchronous_commit=OFF"
-    restart: unless-stopped
-    environment:
-      POSTGRES_HOST_AUTH_METHOD: "trust"
+    restart: unless-stopped 
   email:
     image: djfarrelly/maildev
     ports:
