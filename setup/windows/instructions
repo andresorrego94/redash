@@ -1,0 +1,4 @@
+https://medium.com/@ikishan/creating-a-new-age-dashboard-with-self-hosted-open-source-redash-41e91434390
+
+docker-compose run — rm server create_db
+docker-compose up -d
