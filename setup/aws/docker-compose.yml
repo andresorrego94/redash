@@ -19,8 +19,8 @@ services:
     depends_on:
       - redis
     ports:
-      - "5000:5000"
-      - "5678:5678"
+      - "5000"
+      - "5678"
     environment:
       <<: *redash-environment
       PYTHONUNBUFFERED: 0
@@ -45,5 +45,5 @@ services:
   email:
     image: djfarrelly/maildev
     ports:
-      - "1080:80"
+      - "80"
     restart: unless-stopped
