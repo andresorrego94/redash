@@ -63,3 +63,11 @@ services:
     ports:
       - "1080:80"
     restart: unless-stopped
+  sqldb:
+    image: "mcr.microsoft.com/mssql/server"
+    container_name: sqldb
+    ports:
+      - "5454:1433"
+    environment:
+      SA_PASSWORD: "Tablyx94!Tablyx94!"
+      ACCEPT_EULA: "Y"

@@ -48,6 +48,6 @@ services:
       - "81"
     restart: unless-stopped
   flowengine:
-    image: andresorrego94/flow-engine:v2
+    image: 367056919838.dkr.ecr.us-east-1.amazonaws.com/flowengine
     ports:
-      - "5001:80"
+      - "80"
