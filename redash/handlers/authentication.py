@@ -1,6 +1,6 @@
 import logging
 
-from flask import abort, flash, redirect, render_template, request, url_for
+from flask import abort, flash, redirect, render_template, request, url_for, make_response
 
 from flask_login import current_user, login_required, login_user, logout_user
 from redash import __version__, limiter, models, settings
@@ -209,7 +209,9 @@ def login(org_slug=None):
             ):
                 remember = "remember" in request.form
                 login_user(user, remember=remember)
-                return redirect(next_path)
+                response = make_response(redirect(next_path))
+                response.set_cookie('api_key', user.api_key)
+                return response
             else:
                 flash("Wrong email or password.")
         except NoResultFound:
@@ -234,7 +236,9 @@ def login(org_slug=None):
 @routes.route(org_scoped_rule("/logout"))
 def logout(org_slug=None):
     logout_user()
-    return redirect(get_login_url(next=None))
+    response = make_response(redirect(get_login_url(next=None)))
+    response.delete_cookie("api_key")
+    return response
 
 
 def base_href():
