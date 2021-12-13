@@ -13,6 +13,7 @@ import logoUrl from "@/assets/images/redash_icon_small.png";
 import DesktopOutlinedIcon from "@ant-design/icons/DesktopOutlined";
 import CodeOutlinedIcon from "@ant-design/icons/CodeOutlined";
 import AlertOutlinedIcon from "@ant-design/icons/AlertOutlined";
+import ClusterOutlinedIcon from "@ant-design/icons/ClusterOutlined";
 import PlusOutlinedIcon from "@ant-design/icons/PlusOutlined";
 import QuestionCircleOutlinedIcon from "@ant-design/icons/QuestionCircleOutlined";
 import SettingOutlinedIcon from "@ant-design/icons/SettingOutlined";
@@ -57,6 +58,7 @@ function useNavbarActiveState() {
       ),
       dataSources: includes(["DataSources.List"], currentRoute.id),
       alerts: includes(["Alerts.List", "Alerts.New", "Alerts.View", "Alerts.Edit"], currentRoute.id),
+      flows: includes(["Flows.New"], currentRoute.id),
     }),
     [currentRoute.id]
   );
@@ -103,6 +105,14 @@ export default function DesktopNavbar() {
             <Link href="alerts">
               <AlertOutlinedIcon aria-label="Alerts navigation button" />
               <span className="desktop-navbar-label">Alerts</span>
+            </Link>
+          </Menu.Item>
+        )}
+        {currentUser.hasPermission("list_alerts") && (
+          <Menu.Item key="flows" className={activeState.flows ? "navbar-active-item" : null}>
+            <Link href="flows">
+              <ClusterOutlinedIcon aria-label="Flows navigation button" />
+              <span className="desktop-navbar-label">Flows</span>
             </Link>
           </Menu.Item>
         )}
