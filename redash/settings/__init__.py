@@ -530,3 +530,7 @@ CSRF_TIME_LIMIT = int(os.environ.get("REDASH_CSRF_TIME_LIMIT", 3600 * 6))
 
 # Email blocked domains, use delimiter comma to separated multiple domains
 BLOCKED_DOMAINS = set_from_string(os.environ.get("REDASH_BLOCKED_DOMAINS", "qq.com"))
+
+# Flow engine
+FLOW_ENGINE_API_KEY = os.environ.get("REDASH_FLOW_ENGINE_API_KEY", "")
+FLOW_ENGINE_ALERT_NOTIFY_URL = os.environ.get("REDASH_FLOW_ENGINE_ALERT_NOTIFY_URL", "")

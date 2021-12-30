@@ -1,7 +1,9 @@
 from flask import current_app
 import datetime
+import requests
+import json
 from redash.worker import job, get_job_logger
-from redash import models, utils
+from redash import models, utils, settings
 
 
 logger = get_job_logger(__name__)
@@ -16,6 +18,31 @@ def notify_subscriptions(alert, new_state):
             )
         except Exception as e:
             logger.exception("Error with processing destination")
+
+
+def notify_flow_engine(alert):
+    try:
+        from redash.serializers import serialize_alert
+        headers = {
+            'Content-type': 'application/json',
+            'Accept': 'text/plain',
+            'Authorization': "Key {}".format(settings.FLOW_ENGINE_API_KEY)
+        }
+        serialized_alert = json.dumps(
+            serialize_alert(alert, full=True), sort_keys=True, default=str
+        )
+        response = requests.post(
+            url=settings.FLOW_ENGINE_ALERT_NOTIFY_URL,
+            data=serialized_alert,
+            headers=headers,
+            timeout=5.0,
+        )
+        if response.status_code == 200:
+            logger.info("Alert event was sent to the flow_engine service")
+        else:
+            logger.error("Error %s sending alert to the flow_engine service", response.status_code)
+    except Exception as e:
+        logger.exception("Exception sending alert to the flow_engine service")
 
 
 def should_notify(alert, new_state):
@@ -57,6 +84,8 @@ def check_alerts_for_query(query_id):
                     "Skipping notification (previous state was unknown and now it's ok)."
                 )
                 continue
+
+            notify_flow_engine(alert)
 
             if alert.muted:
                 logger.debug("Skipping notification (alert muted).")
