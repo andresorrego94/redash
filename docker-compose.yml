@@ -16,6 +16,8 @@ x-redash-environment: &redash-environment
   REDASH_MAIL_DEFAULT_SENDER: "redash@example.com"
   REDASH_MAIL_SERVER: "email"
   REDASH_ENFORCE_CSRF: "true"
+  REDASH_FLOW_ENGINE_ALERT_NOTIFY_URL: "http://flowengine:80/alerts/notify"
+  REDASH_FLOW_ENGINE_API_KEY: "78A7F695-9F68-4860-BA5C-BFB148C8C681"
 services:
   server:
     <<: *redash-service
@@ -71,3 +73,20 @@ services:
     environment:
       SA_PASSWORD: "Tablyx94!Tablyx94!"
       ACCEPT_EULA: "Y"
+  flowengine:
+    image: andresorrego94/flowengine:v1
+    ports:
+      - "8181:80"
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+      SQL_SERVER_CONNECTION_STRING_FLOWENGINE: "Server=DESKTOP-4PC1LOK\\SQLEXPRESS;Database=FlowEngineDB;Trusted_Connection=True;MultipleActiveResultSets=True;"
+      MONGO_CONNECTION_STRING: "mongodb+srv://danielFlowEngine:<password>@flowenginecluster.1totk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+      MONGO_DATABASE_NAME: "FlowEngineDB"
+      TEST_ENV: "Test Environment docker"
+      RABBIT_URL: "amqps://tablyx-qa:tablyxtablyx94!@b-b969dcda-397d-4af9-8b88-c4fba0e94cce.mq.us-east-1.amazonaws.com:5671"
+      EXCHANGE_NAME: "tablyx_exchange"
+      REDASH_SERVICE_URL: "http://127.0.0.1:5000"
+      REDASH_SERVICE_KEY: "78A7F695-9F68-4860-BA5C-BFB148C8C681"
+      MODE: "prod"
+      MODE_SESSION: "INTERNAL"
+      QUEUE_NAME_NEXT_STEPS: "nextsteps_queue"
