@@ -1,6 +1,6 @@
 version: "2.2"
 x-redash-service: &redash-service
-  image: andresorrego94/tablyx:v1
+  image: andresorrego94/tablyx:latest
   depends_on:
     - redis
   restart: always
