@@ -11,11 +11,15 @@ x-redash-service: &redash-service
 x-redash-environment: &redash-environment
   REDASH_LOG_LEVEL: "INFO"
   REDASH_REDIS_URL: "redis://redis:6379/0"
-  REDASH_DATABASE_URL: "postgresql://postgres@postgres/postgres"
+  REDASH_DATABASE_URL: "postgresql://postgres:Secreta94!@tablyx-server-database.cg7gwev1cdib.us-east-1.rds.amazonaws.com:5432/postgres"
   REDASH_RATELIMIT_ENABLED: "false"
   REDASH_MAIL_DEFAULT_SENDER: "redash@example.com"
   REDASH_MAIL_SERVER: "email"
   REDASH_ENFORCE_CSRF: "true"
+  REDASH_FLOW_ENGINE_ALERT_NOTIFY_URL: "http://flowengine:80/alerts/notify"
+  REDASH_FLOW_ENGINE_API_KEY: "78A7F695-9F68-4860-BA5C-BFB148C8C681"
+  REDASH_CORS_ACCESS_CONTROL_ALLOW_ORIGIN: "*,http://localhost,http://localhost:3000"
+  REDASH_CORS_ACCESS_CONTROL_ALLOW_CREDENTIALS: "true"
 services:
   server:
     <<: *redash-service
@@ -71,3 +75,22 @@ services:
     environment:
       SA_PASSWORD: "Tablyx94!Tablyx94!"
       ACCEPT_EULA: "Y"
+  flowengine:
+    image: andresorrego94/flowengine:v1
+    ports:
+      - "8001:8001"
+      - "8002:8002"
+    environment:
+      ASPNETCORE_URLS: "http://*:8001"
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+      SQL_SERVER_CONNECTION_STRING_FLOWENGINE: "Server=DESKTOP-4PC1LOK\\SQLEXPRESS;Database=FlowEngineDB;Trusted_Connection=True;MultipleActiveResultSets=True;"
+      MONGO_CONNECTION_STRING: "mongodb+srv://danielFlowEngine:<password>@flowenginecluster.1totk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+      MONGO_DATABASE_NAME: "FlowEngineDB"
+      TEST_ENV: "Test Environment docker"
+      RABBIT_URL: "amqps://tablyx-qa:secretablyx94!@b-b969dcda-397d-4af9-8b88-c4fba0e94cce.mq.us-east-1.amazonaws.com:5671"
+      EXCHANGE_NAME: "tablyx_exchange"
+      REDASH_SERVICE_URL: "http://127.0.0.1:5000"
+      REDASH_SERVICE_KEY: "78A7F695-9F68-4860-BA5C-BFB148C8C681"
+      MODE: "prod"
+      MODE_SESSION: "INTERNAL"
+      QUEUE_NAME_NEXT_STEPS: "nextsteps_queue"
